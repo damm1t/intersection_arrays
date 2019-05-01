@@ -5,6 +5,7 @@
 #include <iostream>
 #include <unordered_map>
 #include <assert.h>
+#include <algorithm>
 #include "array_checker.h"
 
 namespace {
@@ -36,40 +37,23 @@ namespace {
         std::unordered_map<int, size_t> cnt_small;
     };
 
-    size_t pairing(item_holder &holder, const vector<int> &large) { // search for a pair from a large array to a small
-        size_t cnt = 0;
-        for (int value : large) {
-            cnt += (size_t) holder.remove(value);
-        }
-        return cnt;
-    }
-
-    size_t simple_intersection(const vector<int> &lhs, const vector<int> &rhs) { // solve without additional memory
+    // solve without optimization on borders
+    size_t small_intersection(const vector<int> &small, const vector<int> &large) {
         size_t res = 0;
-        for (int l_value : lhs) {
-            for (int r_value : rhs) {
-                res += (size_t) (l_value == r_value);
+        auto sorted_small = small;
+        sort(sorted_small.begin(), sorted_small.end());
+        for (int value : large) {
+            auto find = std::lower_bound(sorted_small.begin(), sorted_small.end(), value);
+            if (find != sorted_small.end() && *find == value) {
+                res++;
             }
         }
         return res;
     }
 
-    size_t small_intersection(const vector<int> &small, const vector<int> &large) { // solve without optimization on borders
-        item_holder holder;
-
-        for (int value : small) { // add elements of small array to map
-            holder.add(value);
-        }
-        return pairing(holder, large);
-    }
-
     size_t intersection_impl(const vector<int> &small, const vector<int> &large) {
         if (large.empty()) {
             return 0;
-        }
-
-        if(small.size() <= TINY_SIZE){
-            return simple_intersection(small, large);
         }
 
         if (small.size() <= SMALL_SIZE) {
@@ -83,13 +67,17 @@ namespace {
             upper_bound = std::max(upper_bound, value);
         }
         item_holder holder;
-
+        // search for a pair from a large array to a small
         for (int value : small) { // add elements of small array to map with borders
             if (lower_bound <= value && value <= upper_bound) {
                 holder.add(value);
             }
         }
-        return pairing(holder, large);
+        size_t cnt = 0;
+        for (int value : large) {
+            cnt += (size_t) holder.remove(value);
+        }
+        return cnt;
     }
 }
 

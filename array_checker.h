@@ -7,8 +7,7 @@
 
 using std::vector;
 
-const size_t SMALL_SIZE = 1024;
-const size_t TINY_SIZE = 10;
+const size_t SMALL_SIZE = 32;
 
 size_t intersection(const vector<int> &lhs, const vector<int> &rhs);
 

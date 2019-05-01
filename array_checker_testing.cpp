@@ -31,7 +31,7 @@ TEST(correctness, empty_test) {
 }
 
 namespace {
-    void generator(vector<int> &res, const int max_size = 300) {
+    void generator(vector<int> &res, const int max_size = 32) {
         int size = rand() % max_size + 1;
         res.resize(size);
         for (int i = 0; i < size; ++i) {
@@ -52,7 +52,6 @@ namespace {
     }
 
     size_t set_intersection(const vector<int> &lhs, const vector<int> &rhs) {
-        size_t res = 0;
         std::set<int> s(lhs.begin(), lhs.end());
         for (int value : rhs) {
             s.insert(value);
@@ -74,7 +73,7 @@ TEST(correctness, random_mutable_test) {
 
 TEST(correctness, random_tiny_test) {
     vector<int> lhs, rhs;
-    for (int times = 0; times < 1000; ++times) {
+    for (int times = 0; times < 700; ++times) {
         generator(lhs, 10);
         generator(rhs, 10);
         size_t res = simple_intersection(lhs, rhs);
@@ -84,7 +83,7 @@ TEST(correctness, random_tiny_test) {
 
 TEST(correctness, random_small_test) {
     vector<int> lhs, rhs;
-    for (int times = 0; times < 100; ++times) {
+    for (int times = 0; times < 200; ++times) {
         generator(lhs);
         generator(rhs);
         size_t res = set_intersection(lhs, rhs);
@@ -94,9 +93,8 @@ TEST(correctness, random_small_test) {
 
 TEST(correctness, random_medium_test) {
     vector<int> lhs, rhs;
-    auto size = (size_t) 2e4;
-    for (int times = 0; times < 10; ++times) {
-        std::cout << "TEST " << times + 1 << ".\n";
+    auto size = 300;
+    for (int times = 0; times < 100; ++times) {
         generator(lhs, size);
         generator(rhs, size);
         size_t res = set_intersection(lhs, rhs);
@@ -106,11 +104,10 @@ TEST(correctness, random_medium_test) {
 
 TEST(correctness, random_large_test) {
     vector<int> lhs, rhs;
-    auto size = (size_t) 1e5;
-    for (int times = 0; times < 3; ++times) {
-        std::cout << "TEST " << times + 1 << ".\n";
-        generator(lhs, size);
-        generator(rhs, size);
+    auto size = 2000;
+    for (int times = 0; times < 6; ++times) {
+        generator(lhs, (times + 1) * size);
+        generator(rhs, (times + 1) * size);
         size_t res = set_intersection(lhs, rhs);
         EXPECT_EQ(intersection(lhs, rhs), res);
     }
