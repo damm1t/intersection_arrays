@@ -16,7 +16,8 @@ TEST(correctness, simple_test) {
 TEST(correctness, simple2_test) {
     EXPECT_EQ(intersection({1}, {1}), 1);
     EXPECT_EQ(intersection({1}, {-1}), 0);
-    EXPECT_EQ(intersection({1000000000}, {1000000000}), 1);
+    EXPECT_EQ(intersection({INT32_MAX}, {2147483647}), 1);
+    EXPECT_EQ(intersection({INT32_MIN}, {-2147483647 - 1}), 1);
     EXPECT_EQ(intersection({0, 13, 27, 30}, {30, 0, 13, 40}), 3);
 }
 
