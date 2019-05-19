@@ -21,6 +21,10 @@ HyperLogLog::HyperLogLog(int sz_bites, Storage *data) : storage(data), sz_bites(
     alpha = get_alpha(sz_bites, m);
 }
 
+HyperLogLog::~HyperLogLog() {
+    delete storage;
+}
+
 bool HyperLogLog::add_hash(long long hashedValue) {
     int j = static_cast<int>(static_cast<unsigned int>(hashedValue) >> (INT_SIZE - sz_bites));
     int r = __builtin_clz(static_cast<unsigned int>(static_cast<unsigned int>(hashedValue) << this->sz_bites) |

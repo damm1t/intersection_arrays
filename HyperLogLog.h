@@ -5,6 +5,7 @@
 #include <optional>
 #include "Storage.h"
 
+// publication: http://algo.inria.fr/flajolet/Publications/FlFuGaMe07.pdf
 class HyperLogLog {
 
 private:
@@ -17,9 +18,7 @@ public:
 
     HyperLogLog(int sz_bites, Storage *data);
 
-    ~HyperLogLog() {
-        delete storage;
-    }
+    ~HyperLogLog();
 
     bool add_hash(long long hashedValue);
 
