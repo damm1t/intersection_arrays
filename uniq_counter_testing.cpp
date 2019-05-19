@@ -9,7 +9,7 @@
 
 
 class UniqCounter {
-    HyperLogLog data = HyperLogLog(20);
+    HyperLogLog data = HyperLogLog(12);
 public:
     void add(int x) {
         data.add(x);
