@@ -6,7 +6,7 @@
 #include <gtest/gtest.h>
 #include <iostream>
 #include <set>
-#include "array_checker.h"
+#include "array_checker/array_checker.h"
 
 TEST(correctness, simple_test) {
     EXPECT_EQ(intersection({1, 2, 3}, {2, 3, 4}), 2);

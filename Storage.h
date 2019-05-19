@@ -2,12 +2,14 @@
 
 #include <vector>
 
+constexpr int INT_SIZE = 32;
+
 class Storage {
 public:
     const int count;
 
 private:
-    std::vector<int> M;
+    std::vector<int> data;
 
 public:
     Storage() : count(0) {};
@@ -20,7 +22,7 @@ public:
 
     static int get_size(int count);
 
-    virtual int get(int position);
+    int get(int position);
 
-    virtual bool update(int position, int value);
+    bool update(int position, int value);
 };

@@ -15,14 +15,14 @@ void HyperLogLog::validate(int sz_bites) {
 
 HyperLogLog::HyperLogLog(int sz_bites) : HyperLogLog(sz_bites, new Storage(1 << sz_bites)) {}
 
-HyperLogLog::HyperLogLog(int sz_bites, Storage *registerSet) : storage(registerSet), sz_bites(sz_bites) {
+HyperLogLog::HyperLogLog(int sz_bites, Storage *data) : storage(data), sz_bites(sz_bites) {
     validate(sz_bites);
     int m = 1 << this->sz_bites;
     alpha = get_alpha(sz_bites, m);
 }
 
 bool HyperLogLog::add_hash(long long hashedValue) {
-    int j = static_cast<int>(static_cast<unsigned int>(hashedValue) >> (32 - sz_bites));
+    int j = static_cast<int>(static_cast<unsigned int>(hashedValue) >> (INT_SIZE - sz_bites));
     int r = __builtin_clz(static_cast<unsigned int>(static_cast<unsigned int>(hashedValue) << this->sz_bites) |
                           (1 << (this->sz_bites - 1)) + 1) + 1;
     return storage->update(j, r);
@@ -34,18 +34,18 @@ bool HyperLogLog::add(int val) {
 }
 
 long long HyperLogLog::cardinality() const {
-    double registerSum = 0;
+    double sum = 0;
     int count = storage->count;
     double zeros = 0.0;
     for (int j = 0; j < storage->count; j++) {
         int val = storage->get(j);
-        registerSum += 1.0 / (1 << val);
+        sum += 1.0 / (1 << val);
         if (val == 0) {
             zeros++;
         }
     }
 
-    double estimate = alpha * (1 / registerSum);
+    double estimate = alpha / sum;
 
     if (estimate <= (5.0 / 2.0) * count) {
         return static_cast<long long>(std::round(linear_counting(count, zeros)));

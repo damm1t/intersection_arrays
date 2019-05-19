@@ -28,7 +28,7 @@ int main() {
     std::random_device rd;
     std::mt19937 gen(rd());
 
-    const int N = (int) 5e6;
+    const int N = (int) 1e6;
     for (int k : {1, 10, 1000, 10000, N / 10, N, N * 10}) {
         std::uniform_int_distribution<> dis(1, k);
         std::set<int> all;
